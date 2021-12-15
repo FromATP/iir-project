@@ -7,7 +7,7 @@ Group project for Introduction to Information Retrieval class
 The text of *Sherlock Holmes* has 76764 lines and 3868122 characters.
 
 Using the parser in ```SpaCy``` lib, we get 1240 names in total.
-Unfortunately, there are several dirty items, like "n\u00e9e Adler". This may due to the raw text itself or the incapability of ```SpaCy``` lib. However, since these cases are very rare, we may ignore them for now.
+There are some strange items like "n\u00e9e Adler". These are letters that are not in English, like special letters in German. Since these cases are very rare, we may ignore them for now.
 
 > You can add here any information and ideas that you want to let others know
 
