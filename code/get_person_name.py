@@ -21,10 +21,10 @@ def get_person_name(file_path):
             
             paragraph = []
             while line is not None and line != '\n':
-                paragraph.append(line)
+                paragraph.append(line.strip())
                 line = next(text_iter, None)
                 i = i + 1
-            paragraph = ''.join(paragraph)
+            paragraph = ' '.join(paragraph)
             
             # using SpaCy to get entity tokens
             token_list = parser(paragraph)

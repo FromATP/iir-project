@@ -1,6 +1,18 @@
 import json
 from pathlib import Path
 
+def merge_by_paragraph(text_list):
+    res = []
+    paragraph = []
+    for line in text_list:
+        if len(line.strip()) == 0:
+            if len(paragraph) != 0:
+                res.append(' '.join(paragraph))
+                paragraph = []
+        else:
+            paragraph.append(line.strip())
+    return res
+
 def split_chapter(text_path, output_path):
     assert isinstance(output_path, Path), 'output_path must be a POSIX Path object.'
     output_path.mkdir(parents=True, exist_ok=True)
@@ -35,17 +47,20 @@ def split_chapter(text_path, output_path):
             next_title = table_of_contents[i + 1]
             assert cur_title in line
             passage = []
+            non_blank_lines = 0
             line = next(text_iter, None)
             while line is not None and next_title not in line:
                 if len(line.strip()) > 0:
-                    passage.append(line)
+                    non_blank_lines += 1
+                passage.append(line)
                 line = next(text_iter, None)
-            if len(passage) > 0:
+            if non_blank_lines > 0:
                 if cur_title == 'PREFACE':
                     cur_title = table_of_contents[i - 1] + ":" + cur_title
+                passage = merge_by_paragraph(passage)
                 cur_chapter = {
                     'title': cur_title,
-                    'text': ''.join(passage)
+                    'text': passage
                 }
                 file_name = f'chapter_{chapter_cnt}.txt'
                 file_path = output_path / file_name
