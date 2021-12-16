@@ -44,7 +44,7 @@ These two scripts are a little time-consuming. But after run them once, their re
 The person-name list and chapters are all stored as ```json``` file:
 
 - The person-name list are dumped as a python ```list```
-- The chapters are dumped seperately, each as a ```dict```. There are two keys in each dict: ```title``` and ```text```. The title are **capitalized**, and the text preserves the **original spaces and blank lines** in raw data.
+- The chapters are dumped seperately, each as a ```dict```. There are two keys in each dict: ```title``` and ```text```. The title are **capitalized**, and every paragraph in raw data is merged as one string, in convinience of semantic analysis.
 
 You can use the following code to fetch these lists and dicts:
 ```python
