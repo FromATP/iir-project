@@ -61,3 +61,13 @@ All building functions should defined in folder ```code```, and referenced in [b
 The occurrence of names in each chapter is saved as a 0-1 numpy matrix (```dtype=int32```). If the element in position $(i, j)$ is 1, it means the $i$th chapter has the $j$th name.
 
 The matrix is saved as ```data/occur_matrix.npy```.
+
+#### data compression
+
+The scale of this matrix is (62, 1298). However, only 2805 of its elements is 1. So it's a sparse matrix, we could only store those indices that is 1. 
+
+Moreover, the row and col indices could be saved as no more than 2 bytes. So we could compress these data using *variable-bytes* algorithm.
+
+The compressed data is saved as ```data/occur_matrix_compressed.bin```. After compression, the size of matrix shrinks from 315kb to 8kb.
+
+### interface
