@@ -6,7 +6,7 @@ Group project for Introduction to Information Retrieval class
 
 The text of *Sherlock Holmes* has 76764 lines and 3868122 characters.
 
-Using the parser in ```SpaCy``` lib, we get 1240 names in total.
+Using the parser in ```SpaCy``` lib, we get 1298 names in total.
 There are some strange items like "n\u00e9e Adler". These are letters that are not in English, like special letters in German. Since these cases are very rare, we may ignore them for now.
 
 > You can add here any information and ideas that you want to let others know
@@ -51,3 +51,13 @@ You can use the following code to fetch these lists and dicts:
 with open(filename, 'r', encoding='utf-8') as inputfd:
     obj = json.load(inputfd)
 ```
+
+### build the retrieval system
+
+All building functions should defined in folder ```code```, and referenced in [build_main.py](build_main.py).
+
+#### occurrence of a person's name 
+
+The occurrence of names in each chapter is saved as a 0-1 numpy matrix (```dtype=int32```). If the element in position $(i, j)$ is 1, it means the $i$th chapter has the $j$th name.
+
+The matrix is saved as ```data/occur_matrix.npy```.
