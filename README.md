@@ -25,7 +25,7 @@ $ pipreqs ./
 
 ### pre-processings
 
-Some pre-processing results are already in the folder ```data```. If you want, you could run the following command to generate a new list of person's name:
+Some pre-processing results are already in the directory ```data```. If you want, you could run the following command to generate a new list of person's name:
 
 ```shell
 $ cd code
@@ -54,11 +54,11 @@ with open(filename, 'r', encoding='utf-8') as inputfd:
 
 ### build the retrieval system
 
-All building functions should defined in folder ```code```, and referenced in [build_main.py](build_main.py).
+All building functions should defined in directory ```code```, and referenced in [build_main.py](build_main.py).
 
 #### occurrence of a person's name 
 
-The occurrence of names in each chapter is saved as a 0-1 numpy matrix (```dtype=int32```). If the element in position $(i, j)$ is 1, it means the $i$th chapter has the $j$th name.
+The occurrence of names in each chapter is saved as a 0-1 numpy matrix (```dtype=int32```). If the element in position (i, j) is 1, it means the ith chapter has the jth name.
 
 The matrix is saved as ```data/occur_matrix.npy```.
 
@@ -71,3 +71,49 @@ Moreover, the row and col indices could be saved as no more than 2 bytes. So we 
 The compressed data is saved as ```data/occur_matrix_compressed.bin```. After compression, the size of matrix shrinks from 315kb to 8kb.
 
 ### interface
+
+Here we implement several C++ APIs for users to call the retrieval system:
+
+- ```void init_system();```
+  - Initialization the system, including read all names and event names into memory, and set bit-strings for every event and name according to occurrence matrix.
+  - If the ith bit in the bit-string of the jth name is 1, that means the jth name occurs in the ith event. Other situations are similar.
+  - Users could call this function explicitly, or let the query function call it automatically.
+- ```char** union_search_for_events(int num, char** names, int &ans_size);```
+  - Given a list of name, return events that have at least one name appearred in it.
+  - Users should provide the number of names and the list of names. The number of returned events will be stored in ```ans_size```.
+  - This function will enumerate queried names, get the bit-strings for each name, and do bitwise or operation among all bit-strings.
+- ```char** union_search_for_names(int num, char** events, int &ans_size);```
+  - Given a list of events, return names that appear in at least one of the events.
+  - The parameter is similar to the above function.
+- ```char** intersection_search_for_events(int num, char** names, int &ans_size);```
+  - Given a list of names, return events that have all names appearred in it.
+  - The parameter is similar to the above function.
+  - Obviously, if you set too much different names, the ```ans_size``` will tend to be 0......
+- ```char** intersection_search_for_names(int num, char** events, int &ans_size);```
+  - Given a list of events, return names that appears in all of the events.
+  - The parameter is similar to the above function.
+
+## How to test
+
+The [test.cpp](test.cpp) provides a sample of how to call the retrieval system. You could modify the code to try different queries.
+
+To run the test, you should first compile the code. Make sure you have GNU Make and G++ compiler on your machine.
+
+To compile the testing code, run the following commands:
+```shell
+$ make clean
+$ make
+```
+
+It will generate a ```build``` directory in your working path. An executable file ```system_main``` will be generated in this directory.
+
+To run the testing program, run the following command:
+```shell
+$ ./build/system_main
+```
+
+The sample [test.cpp](test.cpp) requires for the events that both "Holmes" and "Henry Baskerville" appear. It should output:
+```
+The answer is:
+THE HOUND OF THE BASKERVILLES
+```
