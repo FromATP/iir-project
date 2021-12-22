@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# added by xiaoyuan jin
+.vscode
+.idea
+*.DS_Store
